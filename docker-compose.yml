@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: a-random-mysql-password
+      MYSQL_DATABASE: dbname
+    volumes:
+      - ./mysql-data/:/var/lib/mysql
+
+  redis:
+    image: redis:latest
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - "9090:9090"
+
+  mysql_exporter:
+    image: prom/mysqld-exporter:latest
+    volumes:
+      - ./config/mysql-exporter/.my.cnf:/cfg/.my.cnf:ro
+    command:
+      - '--config.my-cnf=/cfg/.my.cnf'
+    depends_on:
+      - mysql
+    ports:
+      - "9104:9104"
+
+  redis_exporter:
+    image: oliver006/redis_exporter:latest
+    command:
+      - '--redis.addr=redis:6379'
+    ports:
+      - "9121:9121"
+
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      GF_INSTALL_PLUGINS: "grafana-piechart-panel,grafana-simple-json-datasource"
+    volumes:
+      - ./config/grafana/provisioning/:/etc/grafana/provisioning/
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+      - redis
+
