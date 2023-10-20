@@ -30,7 +30,6 @@ docker-compose up --build
 By default, the MySQL database name is set to **dbname** and the root password is **a-random-mysql-password**.
 
 #### Changing Database Credentials
-
 Update the `MYSQL_DATABASE` and `MYSQL_ROOT_PASSWORD` values in `docker-compose.yml` and 
 the credentials in `./config/mysql-exporter/.my.cnf` to reflect your changes.
 ---
