@@ -5,7 +5,6 @@ package cmd
 
 import (
 	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
@@ -14,8 +13,12 @@ var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "serve the chat-bot app",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("serve called")
+		serve()
 	},
+}
+
+func serve() {
+	fmt.Println("serve called")
 }
 
 func init() {

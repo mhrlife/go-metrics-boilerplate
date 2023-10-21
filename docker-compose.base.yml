@@ -8,9 +8,12 @@ services:
       MYSQL_DATABASE: dbname
     volumes:
       - ./mysql-data/:/var/lib/mysql
-
+    expose:
+      - "3306:3306"
   redis:
     image: redis:latest
+    expose:
+      - "6379:6379"
 
   prometheus:
     image: prom/prometheus:latest
@@ -29,14 +32,14 @@ services:
       - '--config.my-cnf=/cfg/.my.cnf'
     depends_on:
       - mysql
-    ports:
+    expose:
       - "9104:9104"
 
   redis_exporter:
     image: oliver006/redis_exporter:latest
     command:
       - '--redis.addr=redis:6379'
-    ports:
+    expose:
       - "9121:9121"
 
   grafana:
@@ -49,12 +52,4 @@ services:
       - prometheus
     ports:
       - "3000:3000"
-
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      - mysql
-      - redis
 
