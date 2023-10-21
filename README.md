@@ -17,7 +17,7 @@ cd go-metrics-boilerplate
 Use the following command to start all associated services:
 
 ```bash
-docker-compose up --build
+docker-compose -f docker-compose.base.yml -f docker-compose.dev.yml up --build
 ```
 ## Accessing Services
 - **Grafana**: Navigate to http://localhost:3000 in your browser. Default credentials are **admin** for both username and password, but remember to change these later.
